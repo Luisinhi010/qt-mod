@@ -10,5 +10,6 @@ Added optmizations/quality life features from qt fixes By Me
 
 #### Why am i still doing stuff with this old mod
 
-My main reason is that, also because i like revisit and rewrite some stuff
+My main reason is that i still love this mod, also because i like revisit and rewrite some stuff
+<p>
 oh but also cuz now i wanna try to make this run on a old laptop XD
