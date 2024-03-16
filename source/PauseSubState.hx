@@ -26,22 +26,28 @@ class PauseSubState extends MusicBeatSubstate
 
 	var pauseMusic:FlxSound;
 	var practiceText:FlxText;
-	//var botplayText:FlxText;
+
+	// var botplayText:FlxText;
 
 	public function new(x:Float, y:Float)
 	{
 		super();
-		//HOLY FUCKING SHIT IM SO LAZY THIS IS FUCKED UP JESUS CHRIST WHAT THE ACTUAL FUCK IS WRONG WITH ME
-		if(CoolUtil.difficulties.length < 2 || PlayState.SONG.song.toLowerCase() == 'termination' || PlayState.SONG.song.toLowerCase() == 'cessation' || PlayState.SONG.song.toLowerCase() == 'interlope') menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
+		// HOLY FUCKING SHIT IM SO LAZY THIS IS FUCKED UP JESUS CHRIST WHAT THE ACTUAL FUCK IS WRONG WITH ME
+		if (CoolUtil.difficulties.length < 2
+			|| PlayState.SONG.song.toLowerCase() == 'termination'
+			|| PlayState.SONG.song.toLowerCase() == 'cessation'
+			|| PlayState.SONG.song.toLowerCase() == 'interlope')
+			menuItemsOG.remove('Change Difficulty'); // No need to change difficulty if there is only one!
 
-		if(PlayState.chartingMode)
+		if (PlayState.chartingMode)
 		{
 			menuItemsOG.insert(2, 'Toggle Practice Mode');
 			menuItemsOG.insert(3, 'Toggle Botplay');
 		}
 		menuItems = menuItemsOG;
 
-		for (i in 0...CoolUtil.difficulties.length) {
+		for (i in 0...CoolUtil.difficulties.length)
+		{
 			var diff:String = '' + CoolUtil.difficulties[i];
 			difficultyChoices.push(diff);
 		}
@@ -148,12 +154,13 @@ class PauseSubState extends MusicBeatSubstate
 		if (accepted)
 		{
 			var daSelected:String = menuItems[curSelected];
-			if(daSelected != 'BACK' && difficultyChoices.contains(daSelected)) {
+			if (daSelected != 'BACK' && difficultyChoices.contains(daSelected))
+			{
 				var name:String = PlayState.SONG.song.toLowerCase();
 				var poop = Highscore.formatSong(name, curSelected);
 				PlayState.SONG = Song.loadFromJson(poop, name);
 				PlayState.storyDifficulty = curSelected;
-				MusicBeatState.resetState();
+				FlxG.resetState();
 				FlxG.sound.music.volume = 0;
 				PlayState.changedDifficulty = true;
 				PlayState.chartingMode = false;
@@ -183,10 +190,13 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 					PlayState.THISISFUCKINGDISGUSTINGPLEASESAVEME = false;
-					if(PlayState.isStoryMode) {
-						MusicBeatState.switchState(new StoryMenuState());
-					} else {
-						MusicBeatState.switchState(new FreeplayState());
+					if (PlayState.isStoryMode)
+					{
+						FlxG.switchState(() -> new StoryMenuState());
+					}
+					else
+					{
+						FlxG.switchState(() -> new FreeplayState());
 					}
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
@@ -205,14 +215,14 @@ class PauseSubState extends MusicBeatSubstate
 		FlxG.sound.music.volume = 0;
 		PlayState.instance.vocals.volume = 0;
 
-		if(noTrans)
+		if (noTrans)
 		{
 			FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
 		}
 		else
 		{
-			MusicBeatState.resetState();
+			FlxG.resetState();
 		}
 	}
 
@@ -252,11 +262,14 @@ class PauseSubState extends MusicBeatSubstate
 		}
 	}
 
-	function regenMenu():Void {
-		for (i in 0...grpMenuShit.members.length) {
+	function regenMenu():Void
+	{
+		for (i in 0...grpMenuShit.members.length)
+		{
 			this.grpMenuShit.remove(this.grpMenuShit.members[0], true);
 		}
-		for (i in 0...menuItems.length) {
+		for (i in 0...menuItems.length)
+		{
 			var item = new Alphabet(0, 70 * i + 30, menuItems[i], true, false);
 			item.isMenuItem = true;
 			item.targetY = i;

@@ -1,11 +1,16 @@
+package;
+
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 
 using StringTools;
 
-class InputFormatter {
-	public static function getKeyName(key:FlxKey):String {
-		switch (key) {
+class InputFormatter
+{
+	public static function getKeyName(key:FlxKey):String
+	{
+		switch (key)
+		{
 			case BACKSPACE:
 				return "BckSpc";
 			case CONTROL:
@@ -72,13 +77,13 @@ class InputFormatter {
 				return ",";
 			case PERIOD:
 				return ".";
-			//case SLASH:
+			// case SLASH:
 			//	return "/";
 			case GRAVEACCENT:
 				return "`";
 			case LBRACKET:
 				return "[";
-			//case BACKSLASH:
+			// case BACKSLASH:
 			//	return "\\";
 			case RBRACKET:
 				return "]";
@@ -89,9 +94,14 @@ class InputFormatter {
 			case NONE:
 				return '---';
 			default:
-				var label:String = '' + key;
-				if(label.toLowerCase() == 'null') return '---';
-				return '' + label.charAt(0).toUpperCase() + label.substr(1).toLowerCase();
+				var label:String = Std.string(key);
+				if (label.toLowerCase() == 'null')
+					return '---';
+
+				var arr:Array<String> = label.split('_');
+				for (i in 0...arr.length)
+					arr[i] = CoolUtil.capitalize(arr[i]);
+				return arr.join(' ');
 		}
 	}
 }

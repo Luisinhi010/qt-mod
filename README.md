@@ -6,3 +6,4 @@ She asks if you want to sing with her and you agree...
 
 This is normal qt mod, with added optmizations and improviments
 Qt Mod by hazard
+Added optmizations/quality life features from qt fixes By Me
