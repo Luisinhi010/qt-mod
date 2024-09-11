@@ -12,6 +12,8 @@ import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
 import flixel.FlxSprite;
 
+using StringTools;
+
 // PORTED FROM INHUMAN LMAOOOO
 class BrutalityGameOverSubstate extends MusicBeatSubstate
 {
@@ -48,12 +50,9 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 		super.create();
 	}
 
-	public function new(killedBy:String, state:PlayState)
+	public function new(killedBy:String)
 	{
 		musicplaying = false;
-
-		trace("Killed by: ", killedBy);
-		trace("Character: ", characterName);
 
 		PlayState.instance.setOnLuas('inGameOver', true);
 		super();
@@ -138,17 +137,13 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 		super.update(elapsed);
 
 		if (musicplaying && FlxG.sound.music.volume < 0.8)
-		{
 			FlxG.sound.music.volume += 0.25 * FlxG.elapsed;
-		}
 
 		if (!ClientPrefs.lowQuality)
 		{
 			screenScanBar.y += 70 * elapsed;
 			if (screenScanBar.y > FlxG.width / 1.75)
-			{
 				screenScanBar.y = -50;
-			}
 		}
 
 		PlayState.instance.callOnLuas('onUpdate', [elapsed]);
@@ -166,20 +161,19 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 				if (hazardInterlopeLaugh != null)
 					FlxTween.tween(hazardInterlopeLaugh, {alpha: 0}, 1.36, {ease: FlxEase.quadOut});
 
-				retry.animation.play('start');
-				retry.alpha = 0.8;
+				if (retry != null)
+				{
+					retry.animation.play('start');
+					retry.alpha = 0.8;
+				}
 			});
 		}
 
 		if (retry.animation.curAnim.name == 'start' && retry.animation.curAnim.finished)
-		{
 			retry.animation.play('idle');
-		}
 
 		if (controls.ACCEPT)
-		{
 			endBullshit();
-		}
 
 		if (controls.BACK)
 		{
@@ -198,24 +192,8 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 		}
 
 		if (FlxG.sound.music.playing)
-		{
 			Conductor.songPosition = FlxG.sound.music.time;
-		}
 		PlayState.instance.callOnLuas('onUpdatePost', [elapsed]);
-	}
-
-	override function beatHit()
-	{
-		super.beatHit();
-
-		// FlxG.log.add('beat');
-	}
-
-	override function stepHit()
-	{
-		super.stepHit();
-		// FlxG.log.add('step');
-		// trace("Y of the dumb screen thing:", screenScanBar.y);
 	}
 
 	var isEnding:Bool = false;
@@ -225,13 +203,21 @@ class BrutalityGameOverSubstate extends MusicBeatSubstate
 		if (!isEnding)
 		{
 			connection.animation.play('retry');
-			remove(retry);
+			if (ClientPrefs.flashing)
+				flixel.effects.FlxFlicker.flicker(connection, 2.7, 0.20, true);
+			FlxTween.tween(retry, {alpha: 0}, .7, {
+				ease: FlxEase.cubeInOut,
+				onComplete: function(twn:FlxTween)
+				{
+					remove(retry);
+				}
+			});
 			isEnding = true;
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music(endSoundName));
-			new FlxTimer().start(0.7, function(tmr:FlxTimer)
+			new FlxTimer().start(.7, function(tmr:FlxTimer)
 			{
-				camHUD.fade(FlxColor.BLACK, 2, false, function()
+				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
 				{
 					FlxG.resetState();
 				});
